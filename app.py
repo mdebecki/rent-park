@@ -50,12 +50,17 @@ def contact():
 # Rezerwacja
 @app.route('/reservation', methods=['GET', 'POST'])
 def reservation():
+    if not current_user.get('is_authenticated'):  # Sprawdzenie, czy użytkownik jest zalogowany
+        return redirect(url_for('login'))  # Przekierowanie na stronę logowania
+
     if request.method == 'POST':
-        # Przykład logiki rezerwacji (do rozszerzenia)
+        # Obsługa rezerwacji
         date = request.form['date']
         time = request.form['time']
         spot = request.form['spot']
+        # Przykład: logika do zapisania rezerwacji w bazie danych
         return redirect(url_for('home'))
+
     return render_template('reservation.html', title="Reservation", current_user=current_user)
 
 # Uruchomienie aplikacji
