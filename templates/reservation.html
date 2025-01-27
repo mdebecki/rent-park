@@ -1,28 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <h2 class="text-center">Reservation</h2>
-        <form action="{{ url_for('reservation') }}" method="POST" class="mt-4">
-            <div class="mb-3">
-                <label for="date" class="form-label">Date</label>
-                <input type="date" class="form-control" id="date" name="date" required>
-            </div>
-            <div class="mb-3">
-                <label for="time" class="form-label">Time</label>
-                <input type="time" class="form-control" id="time" name="time" required>
-            </div>
-            <div class="mb-3">
-                <label for="spot" class="form-label">Spot Number</label>
-                <select class="form-select" id="spot" name="spot" required>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-success w-100">Reserve</button>
-        </form>
+
+<div class="container py-5">
+    <h2 class="text-center mb-4">Rezerwacja Miejsc Postojowych</h2>
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Osadzenie pliku SVG -->
+            <object id="parking-svg" data="{{ url_for('static', filename='svg/ruska-garaz-all.svg') }}" type="image/svg+xml" width="100%" height="500px"></object>
+        </div>
+        <div class="col-lg-4">
+            <h4>Informacje o rezerwacji</h4>
+            <p>Kliknij na dostępne miejsce, aby je zarezerwować.</p>
+            <form id="reservation-form" method="POST" action="{{ url_for('reservation') }}">
+                <input type="hidden" name="slot" id="selected-slot">
+                <button type="submit" class="btn btn-success w-100 mt-3">Potwierdź Rezerwację</button>
+            </form>
+        </div>
     </div>
 </div>
+
+<script>
+    // JavaScript do obsługi rezerwacji
+    document.addEventListener('DOMContentLoaded', function () {
+        const svgObject = document.getElementById('parking-svg');
+
+        svgObject.addEventListener('load', function () {
+            const svgDoc = svgObject.contentDocument; // Pobranie treści SVG
+            const slots = svgDoc.querySelectorAll('.parking-slot'); // Znajdź wszystkie miejsca parkingowe
+            const selectedSlotInput = document.getElementById('selected-slot');
+
+            slots.forEach(slot => {
+                slot.addEventListener('click', function () {
+                    if (this.classList.contains('reserved')) {
+                        alert('To miejsce jest już zarezerwowane.');
+                        return;
+                    }
+
+                    // Usuń wcześniejszy wybór
+                    svgDoc.querySelectorAll('.selected').forEach(selected => {
+                        selected.classList.remove('selected');
+                    });
+
+                    // Dodaj klasę 'selected' do wybranego miejsca
+                    this.classList.add('selected');
+
+                    // Ustaw wybrane miejsce w formularzu
+                    selectedSlotInput.value = `Miejsce (${this.getAttribute('id')})`;
+                });
+            });
+        });
+    });
+</script>
 {% endblock %}
