@@ -1,23 +1,28 @@
 {% extends "base.html" %}
+
 {% block content %}
-<section>
-    <h2>Reserve Your Parking Spot</h2>
-    <form action="{{ url_for('reservation') }}" method="POST">
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date" required>
-        
-        <label for="time">Time:</label>
-        <input type="time" id="time" name="time" required>
-        
-        <label for="spot">Spot Number:</label>
-        <select id="spot" name="spot">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <!-- Add more spots as needed -->
-        </select>
-        
-        <button type="submit">Reserve</button>
-    </form>
-</section>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="text-center">Reservation</h2>
+        <form action="{{ url_for('reservation') }}" method="POST" class="mt-4">
+            <div class="mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" class="form-control" id="date" name="date" required>
+            </div>
+            <div class="mb-3">
+                <label for="time" class="form-label">Time</label>
+                <input type="time" class="form-control" id="time" name="time" required>
+            </div>
+            <div class="mb-3">
+                <label for="spot" class="form-label">Spot Number</label>
+                <select class="form-select" id="spot" name="spot" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Reserve</button>
+        </form>
+    </div>
+</div>
 {% endblock %}
